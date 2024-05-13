@@ -1,3 +1,4 @@
+import { Heading, Input } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 const BookList = () => {
@@ -21,6 +22,8 @@ const BookList = () => {
         });
         const data = await response.json();
 
+        console.log(`${process.env.REACT_APP_API_KEY}`);
+
         if (data.meta && data.meta.pageable_count) {
             pageCount.current =
                 data.meta.pageable_count % 10 > 0 ? data.meta.pageable_count / 10 + 1 : data.meta.pageable_count / 10;
@@ -38,10 +41,9 @@ const BookList = () => {
 
     return (
         <>
-            <h1>동영상 검색 목록</h1>
-            <div class="search-container">
-                <input type="text" placeholder="검색어 입력" onChange={changeSearch} />
-            </div>
+            <Heading>동영상 검색 목록</Heading>
+            <Input type="text" placeholder="검색어 입력" onChange={changeSearch} size="lg" variant="filled" />
+
             <div>
                 {bookList.map((book) => (
                     <>
