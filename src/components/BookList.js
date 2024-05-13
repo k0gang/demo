@@ -16,7 +16,7 @@ const BookList = () => {
         const response = await fetch(`https://dapi.kakao.com/v2/search/vclip?query=${search}&page=${page}`, {
             method: 'GET',
             headers: {
-                Authorization: 'KakaoAK 0fd22c7eb03dcd2dc9abdf2475fd9626',
+                Authorization: `KakaoAK ${process.env.REACT_APP_API_KEY}`,
             },
         });
         const data = await response.json();
