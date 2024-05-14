@@ -17,23 +17,21 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, HStack } from '@chakra-ui/react';
-import { MdOndemandVideo } from 'react-icons/md';
+import { LiaBookSolid } from 'react-icons/lia';
 import { AiFillMoon, AiFillSun } from 'react-icons/ai';
 
-const VideoList = () => {
-    // useState 는 화면 랜더링에 반영됨
-    const [VideoList, setVideoList] = useState([]);
+const BookList = () => {
+    const [bookList, setBookList] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
-    // useRef 는 화면 렌더링 반영되지 않는 참조값
     const pageCount = useRef(1);
 
     const { colorMode, toggleColorMode } = useColorMode();
     const color = useColorModeValue('red.500', 'white');
     const buttonScheme = useColorModeValue('blackAlpha', 'whiteAlpha');
 
-    const fetchVideos = async () => {
-        const response = await fetch(`https://dapi.kakao.com/v2/search/vclip?query=${search}&page=${page}`, {
+    const fetchBooks = async () => {
+        const response = await fetch(`https://dapi.kakao.com/v3/search/book?query=${search}&page=${page}`, {
             method: 'GET',
             headers: {
                 Authorization: `KakaoAK ${process.env.REACT_APP_API_KEY}`,
@@ -47,14 +45,13 @@ const VideoList = () => {
                 data.meta.pageable_count % 10 > 0 ? data.meta.pageable_count / 10 + 1 : data.meta.pageable_count / 10;
             pageCount.current = Math.floor(pageCount.current);
             pageCount.current = pageCount.current > 15 ? 15 : pageCount.current;
-            setVideoList(data.documents);
+            setBookList(data.documents);
         } else {
             console.error('ㄴㄴ');
         }
     };
-
     useEffect(() => {
-        fetchVideos();
+        fetchBooks();
     }, [page, search]);
 
     const changeSearch = (e) => {
@@ -65,7 +62,7 @@ const VideoList = () => {
         <>
             <Box>
                 <Heading color={color}>
-                    <Icon as={MdOndemandVideo} boxSize={'1.5em'}></Icon>동영상 검색 목록
+                    <Icon as={LiaBookSolid} boxSize={'1.5em'}></Icon>책 검색 목록
                 </Heading>
                 {colorMode === 'light' ? (
                     <IconButton icon={<AiFillMoon />} onClick={toggleColorMode} size={'lg'}></IconButton>
@@ -84,17 +81,15 @@ const VideoList = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {VideoList.map((video, index) => (
-                                <>
-                                    <Tr>
-                                        <Td>{(page - 1) * 10 + index + 1}</Td>
-                                        <Td>
-                                            <a href={video.url}></a>
-                                            {video.title}
-                                        </Td>
-                                        <Td>{video.url}</Td>
-                                    </Tr>
-                                </>
+                            {bookList.map((book, index) => (
+                                <Tr>
+                                    <Td>{(page - 1) * 10 + index + 1}</Td>
+                                    <Td>
+                                        <a href={book.url}>{book.title}</a>
+                                    </Td>
+
+                                    <Td>{book.author}</Td>
+                                </Tr>
                             ))}
                         </Tbody>
                         <Tfoot></Tfoot>
@@ -119,4 +114,4 @@ const VideoList = () => {
         </>
     );
 };
-export default VideoList;
+export default BookList;

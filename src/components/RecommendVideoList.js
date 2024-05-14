@@ -20,11 +20,11 @@ import { Box, HStack } from '@chakra-ui/react';
 import { MdOndemandVideo } from 'react-icons/md';
 import { AiFillMoon, AiFillSun } from 'react-icons/ai';
 
-const VideoList = () => {
+const RecommendVideoList = () => {
     // useState 는 화면 랜더링에 반영됨
     const [VideoList, setVideoList] = useState([]);
     const [page, setPage] = useState(1);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState('고양이');
     // useRef 는 화면 렌더링 반영되지 않는 참조값
     const pageCount = useRef(1);
 
@@ -65,7 +65,7 @@ const VideoList = () => {
         <>
             <Box>
                 <Heading color={color}>
-                    <Icon as={MdOndemandVideo} boxSize={'1.5em'}></Icon>동영상 검색 목록
+                    <Icon as={MdOndemandVideo} boxSize={'1.5em'}></Icon>추천 영상 목록
                 </Heading>
                 {colorMode === 'light' ? (
                     <IconButton icon={<AiFillMoon />} onClick={toggleColorMode} size={'lg'}></IconButton>
@@ -119,4 +119,4 @@ const VideoList = () => {
         </>
     );
 };
-export default VideoList;
+export default RecommendVideoList;
