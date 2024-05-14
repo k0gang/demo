@@ -20,9 +20,9 @@ import { Box, HStack } from '@chakra-ui/react';
 import { MdOndemandVideo } from 'react-icons/md';
 import { AiFillMoon, AiFillSun } from 'react-icons/ai';
 
-const BookList = () => {
+const VideoList = () => {
     // useState 는 화면 랜더링에 반영됨
-    const [bookList, setBookList] = useState([]);
+    const [VideoList, setVideoList] = useState([]);
     const [page, setPage] = useState(1);
     const [search, setSearch] = useState('');
     // useRef 는 화면 렌더링 반영되지 않는 참조값
@@ -51,7 +51,7 @@ const BookList = () => {
                 data.meta.pageable_count % 10 > 0 ? data.meta.pageable_count / 10 + 1 : data.meta.pageable_count / 10;
             pageCount.current = Math.floor(pageCount.current);
             pageCount.current = pageCount.current > 15 ? 15 : pageCount.current;
-            setBookList(data.documents);
+            setVideoList(data.documents);
         } else {
             console.error('ㄴㄴ');
         }
@@ -84,7 +84,7 @@ const BookList = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {bookList.map((book, index) => (
+                            {VideoList.map((book, index) => (
                                 <>
                                     <Tr>
                                         <Td>{(page - 1) * 10 + index + 1}</Td>
@@ -120,4 +120,4 @@ const BookList = () => {
         </>
     );
 };
-export default BookList;
+export default VideoList;
