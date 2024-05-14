@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import Root from './routes/Root';
-import BookList from './components/BookList';
+import VideoList from './components/VideoList';
 
 // 라우터 설계
 /*
@@ -29,7 +29,7 @@ const router = createBrowserRouter(
                 },
                 {
                     path: '/video',
-                    element: <BookList />,
+                    element: <VideoList />,
                 },
                 {
                     path: '/book',
