@@ -1,24 +1,29 @@
-import { Input } from "@chakra-ui/input";
-import { Heading } from "@chakra-ui/layout";
 import {
+  Box,
   Button,
+  Card,
+  CardBody,
+  Divider,
+  HStack,
+  Input,
+  Image,
+  Text,
+  Stack,
+  useColorModeValue,
+  useColorMode,
+  Heading,
   Icon,
   IconButton,
-  Table,
   TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
+  Table,
   Thead,
   Tr,
-  useColorMode,
-  useColorModeValue,
+  Tbody,
+  Tfoot,
+  Td,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
-import { Box, HStack } from "@chakra-ui/react";
-import { MdOndemandVideo } from "react-icons/md";
-import { AiFillMoon, AiFillSun } from "react-icons/ai";
+import { RxVideo } from "react-icons/rx";
 
 const VideoList = () => {
   // useState 는 화면 랜더링에 반영됨
@@ -28,11 +33,11 @@ const VideoList = () => {
   // useRef 는 화면 렌더링 반영되지 않는 참조값
   const pageCount = useRef(1);
 
-  const { colorMode, toggleColorMode } = useColorMode();
   const color = useColorModeValue("red.500", "white");
   const buttonScheme = useColorModeValue("blackAlpha", "whiteAlpha");
 
   const fetchVideos = async () => {
+    if (search.length < 2) return;
     const response = await fetch(
       `https://dapi.kakao.com/v2/search/vclip?query=${search}&page=${page}`,
       {
@@ -43,19 +48,14 @@ const VideoList = () => {
       }
     );
     const data = await response.json();
-    console.log(data);
 
-    if (data.meta && data.meta.pageable_count) {
-      pageCount.current =
-        data.meta.pageable_count % 10 > 0
-          ? data.meta.pageable_count / 10 + 1
-          : data.meta.pageable_count / 10;
-      pageCount.current = Math.floor(pageCount.current);
-      pageCount.current = pageCount.current > 15 ? 15 : pageCount.current;
-      setVideoList(data.documents);
-    } else {
-      console.error("ㄴㄴ");
-    }
+    pageCount.current =
+      data.meta.pageable_count % 10 > 0
+        ? data.meta.pageable_count / 10 + 1
+        : data.meta.pageable_count / 10;
+    pageCount.current = Math.floor(pageCount.current);
+    pageCount.current = pageCount.current > 15 ? 15 : pageCount.current;
+    setVideoList(data.documents);
   };
 
   useEffect(() => {
@@ -70,22 +70,9 @@ const VideoList = () => {
     <>
       <Box>
         <Heading color={color}>
-          <Icon as={MdOndemandVideo} boxSize={"1.5em"}></Icon>동영상 검색 목록
+          <Icon as={RxVideo} boxSize={"1.3em"} />
+          검색 영상 목록
         </Heading>
-        {colorMode === "light" ? (
-          <IconButton
-            icon={<AiFillMoon />}
-            onClick={toggleColorMode}
-            size={"lg"}
-          ></IconButton>
-        ) : (
-          <IconButton
-            icon={<AiFillSun />}
-            onClick={toggleColorMode}
-            size={"lg"}
-          ></IconButton>
-        )}
-
         <Input
           type="text"
           placeholder="검색어 입력"
@@ -93,48 +80,52 @@ const VideoList = () => {
           size="lg"
           variant="filled"
         />
-        <TableContainer>
-          <Table variant={"striped"} colorScheme="green">
-            <Thead>
-              <Tr>
-                <Th>No</Th>
-                <Th>Title</Th>
-                <Th>Link</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {VideoList.map((video, index) => (
-                <>
-                  <Tr>
-                    <Td>{(page - 1) * 10 + index + 1}</Td>
-                    <Td>
-                      <a href={video.url}></a>
-                      {video.title}
-                    </Td>
-                    <Td>{video.url}</Td>
-                  </Tr>
-                </>
-              ))}
-            </Tbody>
-            <Tfoot></Tfoot>
-          </Table>
-        </TableContainer>
-
-        <HStack>
-          {Array.from({ length: pageCount.current }, (_, index) => (
-            <>
-              <Button
-                colorScheme={page === index + 1 ? "green" : buttonScheme}
-                onClick={(e) => {
-                  setPage(index + 1);
-                }}
-              >
-                {index + 1}
-              </Button>
-            </>
-          ))}
-        </HStack>
       </Box>
+      <TableContainer>
+        <Table variant={"striped"} colorScheme="teal">
+          <Thead>
+            <Tr>
+              <Th>No</Th>
+              <Th>썸네일</Th>
+              <Th>Title</Th>
+              <Th>author</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {VideoList.map((video, index) => (
+              <>
+                <Tr>
+                  <Td>{(page - 1) * 10 + index + 1}</Td>
+                  <Box>
+                    <a href={video.url}>
+                      <Image boxSize="100px" src={video.thumbnail} />
+                    </a>
+                  </Box>
+                  <Td>
+                    <a href={video.url}>{video.title}</a>
+                  </Td>
+                  <Td>{video.author}</Td>
+                </Tr>
+              </>
+            ))}
+          </Tbody>
+          <Tfoot></Tfoot>
+        </Table>
+      </TableContainer>
+      <HStack>
+        {Array.from({ length: pageCount.current }, (_, index) => (
+          <>
+            <Button
+              colorScheme={page === index + 1 ? "green" : buttonScheme}
+              onClick={(e) => {
+                setPage(index + 1);
+              }}
+            >
+              {index + 1}
+            </Button>
+          </>
+        ))}
+      </HStack>
     </>
   );
 };
