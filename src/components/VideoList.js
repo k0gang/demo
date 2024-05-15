@@ -21,6 +21,7 @@ import {
   Tbody,
   Tfoot,
   Td,
+  Th,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import { RxVideo } from "react-icons/rx";
