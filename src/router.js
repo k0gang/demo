@@ -1,9 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Root from './routes/Root';
-import VideoList from './components/VideoList';
-import BookList from './components/BookList';
-import RecommendBookList from './components/RecommendBookList';
-import RecommendVideoList from './components/RecommendVideoList';
+import { createBrowserRouter } from "react-router-dom";
+import Root from "./routes/Root";
+import VideoList from "./components/VideoList";
+import BookList from "./components/BookList";
+import RecommendBookList from "./components/RecommendBookList";
+import RecommendVideoList from "./components/RecommendVideoList";
+import Home from "./components/Home";
 
 // 라우터 설계
 /*
@@ -20,38 +21,42 @@ GET /demo/book/search/:isbn}    검색 도서 상세 페이지       <BookDetail
 */
 
 const router = createBrowserRouter(
-    [
-        {
-            path: '/',
-            element: <Root />,
-            children: [
-                {
-                    path: '/video',
-                    element: <VideoList />,
-                },
-                {
-                    path: '/video/list',
-                    element: <RecommendVideoList />,
-                },
-                {
-                    path: '/book',
-                    element: <BookList />,
-                },
-                {
-                    path: '/book/list',
-                    element: <RecommendBookList />,
-                },
-            ],
-            errorElement: (
-                <>
-                    <h1>Error</h1>
-                </>
-            ),
-        },
-    ],
+  [
     {
-        basename: '/demo',
-    }
+      path: "/",
+      element: <Root />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/video",
+          element: <VideoList />,
+        },
+        {
+          path: "/video/list",
+          element: <RecommendVideoList />,
+        },
+        {
+          path: "/book",
+          element: <BookList />,
+        },
+        {
+          path: "/book/list",
+          element: <RecommendBookList />,
+        },
+      ],
+      errorElement: (
+        <>
+          <h1>Error</h1>
+        </>
+      ),
+    },
+  ],
+  {
+    basename: "/demo",
+  }
 );
 
 export default router;
